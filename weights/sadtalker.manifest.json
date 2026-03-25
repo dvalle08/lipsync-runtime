@@ -1,0 +1,42 @@
+[
+  {
+    "kind": "url",
+    "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/mapping_00109-model.pth.tar",
+    "destination": "checkpoints/mapping_00109-model.pth.tar"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/mapping_00229-model.pth.tar",
+    "destination": "checkpoints/mapping_00229-model.pth.tar"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/SadTalker_V0.0.2_256.safetensors",
+    "destination": "checkpoints/SadTalker_V0.0.2_256.safetensors"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/OpenTalker/SadTalker/releases/download/v0.0.2-rc/SadTalker_V0.0.2_512.safetensors",
+    "destination": "checkpoints/SadTalker_V0.0.2_512.safetensors"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/xinntao/facexlib/releases/download/v0.1.0/alignment_WFLW_4HG.pth",
+    "destination": "gfpgan/weights/alignment_WFLW_4HG.pth"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/xinntao/facexlib/releases/download/v0.1.0/detection_Resnet50_Final.pth",
+    "destination": "gfpgan/weights/detection_Resnet50_Final.pth"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.0/GFPGANv1.4.pth",
+    "destination": "gfpgan/weights/GFPGANv1.4.pth"
+  },
+  {
+    "kind": "url",
+    "url": "https://github.com/xinntao/facexlib/releases/download/v0.2.2/parsing_parsenet.pth",
+    "destination": "gfpgan/weights/parsing_parsenet.pth"
+  }
+]

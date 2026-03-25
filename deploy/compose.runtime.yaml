@@ -1,0 +1,119 @@
+name: talking-head-local
+services:
+  redis:
+    image: redis:7.4-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build:
+      context: ..
+      dockerfile: docker/gateway/Dockerfile
+    image: talking-head-runtime/gateway:local
+    env_file:
+      - ../.env
+    ports:
+      - "127.0.0.1:${APP_PORT:-8000}:8000"
+    volumes:
+      - ../.env:/srv/talking-head-runtime/.env:ro
+      - gateway-jobs:${JOBS_ROOT:-/var/lib/talking-head/gateway/jobs}
+      - musetalk-results:${MUSE_TALK_RESULTS_ROOT:-/var/lib/talking-head/musetalk/results}:ro
+      - sadtalker-results:${SADTALKER_RESULTS_ROOT:-/var/lib/talking-head/sadtalker/results}:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:8000/health/ready >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  musetalk-api:
+    profiles: ["musetalk"]
+    build:
+      context: ..
+      dockerfile: docker/musetalk/Dockerfile
+    image: talking-head-runtime/musetalk:local
+    env_file:
+      - ../.env
+    volumes:
+      - gateway-jobs:${JOBS_ROOT:-/var/lib/talking-head/gateway/jobs}:ro
+      - musetalk-models:/models
+      - musetalk-results:/results
+      - musetalk-cache:/cache
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  sadtalker-api:
+    profiles: ["sadtalker"]
+    build:
+      context: ..
+      dockerfile: docker/sadtalker/Dockerfile
+    image: talking-head-runtime/sadtalker:local
+    env_file:
+      - ../.env
+    volumes:
+      - gateway-jobs:${JOBS_ROOT:-/var/lib/talking-head/gateway/jobs}:ro
+      - sadtalker-models:/models
+      - sadtalker-results:/results
+      - sadtalker-cache:/cache
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  weights-musetalk-init:
+    profiles: ["bootstrap"]
+    build:
+      context: ..
+      dockerfile: docker/init/Dockerfile
+    image: talking-head-runtime/bootstrap:local
+    command: ["python", "/srv/talking-head-runtime/docker/init/download_weights.py", "/srv/talking-head-runtime/weights/musetalk.manifest.json", "/models"]
+    volumes:
+      - musetalk-models:/models
+
+  weights-sadtalker-init:
+    profiles: ["bootstrap"]
+    build:
+      context: ..
+      dockerfile: docker/init/Dockerfile
+    image: talking-head-runtime/bootstrap:local
+    command: ["python", "/srv/talking-head-runtime/docker/init/download_weights.py", "/srv/talking-head-runtime/weights/sadtalker.manifest.json", "/models"]
+    volumes:
+      - sadtalker-models:/models
+
+volumes:
+  redis-data:
+  gateway-jobs:
+  musetalk-models:
+  musetalk-results:
+  musetalk-cache:
+  sadtalker-models:
+  sadtalker-results:
+  sadtalker-cache:

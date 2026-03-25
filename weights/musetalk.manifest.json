@@ -1,0 +1,66 @@
+[
+  {
+    "kind": "huggingface",
+    "repo_id": "TMElyralab/MuseTalk",
+    "filename": "musetalkV15/musetalk.json",
+    "destination": "musetalkV15/musetalk.json"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "TMElyralab/MuseTalk",
+    "filename": "musetalkV15/unet.pth",
+    "destination": "musetalkV15/unet.pth"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "stabilityai/sd-vae-ft-mse",
+    "filename": "config.json",
+    "destination": "sd-vae/config.json"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "stabilityai/sd-vae-ft-mse",
+    "filename": "diffusion_pytorch_model.bin",
+    "destination": "sd-vae/diffusion_pytorch_model.bin"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "openai/whisper-tiny",
+    "filename": "config.json",
+    "destination": "whisper/config.json"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "openai/whisper-tiny",
+    "filename": "pytorch_model.bin",
+    "destination": "whisper/pytorch_model.bin"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "openai/whisper-tiny",
+    "filename": "preprocessor_config.json",
+    "destination": "whisper/preprocessor_config.json"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "yzd-v/DWPose",
+    "filename": "dw-ll_ucoco_384.pth",
+    "destination": "dwpose/dw-ll_ucoco_384.pth"
+  },
+  {
+    "kind": "huggingface",
+    "repo_id": "ByteDance/LatentSync",
+    "filename": "latentsync_syncnet.pt",
+    "destination": "syncnet/latentsync_syncnet.pt"
+  },
+  {
+    "kind": "gdrive",
+    "file_id": "154JgKpzCPW82qINcVieuPH3fZ2e0P812",
+    "destination": "face-parse-bisent/79999_iter.pth"
+  },
+  {
+    "kind": "url",
+    "url": "https://download.pytorch.org/models/resnet18-5c106cde.pth",
+    "destination": "face-parse-bisent/resnet18-5c106cde.pth"
+  }
+]
