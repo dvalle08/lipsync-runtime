@@ -7,6 +7,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
+os.chdir("/opt/musetalk")
 sys.path.insert(0, "/opt/musetalk")
 sys.path.insert(0, "/srv/adapter")
 
@@ -25,6 +26,7 @@ REQUIRED_FILES = [
     Path("/models/whisper/config.json"),
     Path("/models/whisper/pytorch_model.bin"),
     Path("/models/whisper/preprocessor_config.json"),
+    Path("/cache/torch/hub/checkpoints/s3fd-619a316812.pth"),
 ]
 
 

@@ -18,7 +18,7 @@ WORKDIR /opt/SadTalker
 RUN python -m pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir torch==1.12.1+cu113 torchvision==0.13.1+cu113 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu113
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir fastapi httpx python-multipart uvicorn[standard]
+RUN pip install --no-cache-dir "setuptools<81" fastapi httpx python-multipart uvicorn[standard]
 
 RUN mkdir -p /srv/adapter /models/checkpoints /models/gfpgan/weights /opt/SadTalker/gfpgan
 RUN rm -rf /opt/SadTalker/checkpoints             && ln -s /models/checkpoints /opt/SadTalker/checkpoints             && ln -s /models/gfpgan/weights /opt/SadTalker/gfpgan/weights

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import asyncio
 import os
-import subprocess
+from asyncio.subprocess import PIPE
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
@@ -93,17 +94,18 @@ async def infer(request: InferRequest) -> dict[str, str]:
     if still:
         command.append("--still")
 
-    result = subprocess.run(
-        command,
+    process = await asyncio.create_subprocess_exec(
+        *command,
         cwd="/opt/SadTalker",
-        capture_output=True,
-        text=True,
-        check=False,
+        stdout=PIPE,
+        stderr=PIPE,
     )
-    if result.returncode != 0:
+    stdout_bytes, stderr_bytes = await process.communicate()
+    if process.returncode != 0:
+        stderr_text = stderr_bytes.decode(errors="replace")
         raise HTTPException(
             status_code=500,
-            detail=f"SadTalker failed with exit code {result.returncode}: {result.stderr}",
+            detail=f"SadTalker failed with exit code {process.returncode}: {stderr_text}",
         )
 
     candidates = sorted(result_dir.rglob("*.mp4"), key=lambda item: item.stat().st_mtime)

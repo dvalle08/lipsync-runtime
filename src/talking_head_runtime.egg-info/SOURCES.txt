@@ -15,3 +15,4 @@ src/talking_head_runtime.egg-info/requires.txt
 src/talking_head_runtime.egg-info/top_level.txt
 tests/test_docker_control.py
 tests/test_models.py
+tests/test_storage.py

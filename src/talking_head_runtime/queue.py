@@ -57,6 +57,10 @@ class RedisJobStore:
     async def ack(self, job_id: str) -> None:
         await self.client.lrem(self.settings.PROCESSING_KEY, 1, job_id)
 
+    async def requeue_processing_job(self, job_id: str) -> None:
+        await self.client.lrem(self.settings.PROCESSING_KEY, 1, job_id)
+        await self.client.lpush(self.settings.QUEUE_KEY, job_id)
+
     async def recover_processing_jobs(self) -> None:
         while True:
             recovered = await self.client.rpoplpush(

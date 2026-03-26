@@ -48,14 +48,22 @@ class JobWorker:
             if job is None:
                 await self.store.ack(job_id)
                 continue
+            should_ack = True
             try:
                 await self._process(job)
+            except asyncio.CancelledError:
+                should_ack = False
+                current = await self.store.load_job(job_id) or job
+                await self.store.save_job(current.mark(JobState.QUEUED))
+                await self.store.requeue_processing_job(job_id)
+                raise
             except Exception as exc:  # noqa: BLE001
                 failed = job.mark(JobState.FAILED, error=str(exc))
                 failed = failed.model_copy(update={"attempts": job.attempts + 1})
                 await self.store.save_job(failed)
             finally:
-                await self.store.ack(job_id)
+                if should_ack:
+                    await self.store.ack(job_id)
 
     async def _process(self, job: JobRecord) -> None:
         starting = job.mark(JobState.STARTING_BACKEND)

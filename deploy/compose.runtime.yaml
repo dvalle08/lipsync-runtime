@@ -30,10 +30,11 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1:8000/health/ready >/dev/null || exit 1"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
       interval: 15s
       timeout: 5s
       retries: 5
+      start_period: 10s
     restart: unless-stopped
 
   musetalk-api:
@@ -54,6 +55,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 10
+      start_period: 45s
     deploy:
       resources:
         reservations:
@@ -80,6 +82,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 10
+      start_period: 30s
     deploy:
       resources:
         reservations:
@@ -94,9 +97,19 @@ services:
       context: ..
       dockerfile: docker/init/Dockerfile
     image: talking-head-runtime/bootstrap:local
-    command: ["python", "/srv/talking-head-runtime/docker/init/download_weights.py", "/srv/talking-head-runtime/weights/musetalk.manifest.json", "/models"]
+    command: ["/srv/talking-head-runtime/weights/musetalk.manifest.json", "/models"]
     volumes:
       - musetalk-models:/models
+
+  weights-musetalk-cache-init:
+    profiles: ["bootstrap"]
+    build:
+      context: ..
+      dockerfile: docker/init/Dockerfile
+    image: talking-head-runtime/bootstrap:local
+    command: ["/srv/talking-head-runtime/weights/musetalk-cache.manifest.json", "/cache"]
+    volumes:
+      - musetalk-cache:/cache
 
   weights-sadtalker-init:
     profiles: ["bootstrap"]
@@ -104,7 +117,7 @@ services:
       context: ..
       dockerfile: docker/init/Dockerfile
     image: talking-head-runtime/bootstrap:local
-    command: ["python", "/srv/talking-head-runtime/docker/init/download_weights.py", "/srv/talking-head-runtime/weights/sadtalker.manifest.json", "/models"]
+    command: ["/srv/talking-head-runtime/weights/sadtalker.manifest.json", "/models"]
     volumes:
       - sadtalker-models:/models
 

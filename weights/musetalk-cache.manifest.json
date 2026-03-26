@@ -1,0 +1,7 @@
+[
+  {
+    "kind": "url",
+    "url": "https://www.adrianbulat.com/downloads/python-fan/s3fd-619a316812.pth",
+    "destination": "torch/hub/checkpoints/s3fd-619a316812.pth"
+  }
+]

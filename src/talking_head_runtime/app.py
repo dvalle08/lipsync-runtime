@@ -127,6 +127,7 @@ async def _create_job(
     )
     stored_inputs = app.state.storage.store_inputs(
         draft.job_id,
+        engine=engine,
         source_filename=source_name,
         source_file=source.file,
         audio_filename=audio_name,

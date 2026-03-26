@@ -18,6 +18,7 @@ This project owns the infrastructure that does not belong in a client app:
 - `musetalk-api`: internal GPU backend, off by default
 - `sadtalker-api`: internal GPU backend, off by default
 - `weights-musetalk-init`: one-shot model bootstrap
+- `weights-musetalk-cache-init`: one-shot MuseTalk cache bootstrap
 - `weights-sadtalker-init`: one-shot model bootstrap
 
 ## Host prerequisites
@@ -44,6 +45,7 @@ docker compose -f deploy/compose.runtime.yaml build
 
 ```bash
 docker compose -f deploy/compose.runtime.yaml --profile bootstrap run --rm weights-musetalk-init
+docker compose -f deploy/compose.runtime.yaml --profile bootstrap run --rm weights-musetalk-cache-init
 docker compose -f deploy/compose.runtime.yaml --profile bootstrap run --rm weights-sadtalker-init
 ```
 
@@ -54,6 +56,7 @@ docker compose -f deploy/compose.runtime.yaml up -d redis api-gateway
 ```
 
 The gateway starts `musetalk-api` or `sadtalker-api` only when a job requires it.
+For MuseTalk image uploads, the gateway pads odd image dimensions to the next even size before enqueueing the job so `ffmpeg` does not fail on still-image inputs.
 
 ## API
 

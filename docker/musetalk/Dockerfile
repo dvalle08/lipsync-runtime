@@ -18,8 +18,11 @@ WORKDIR /opt/musetalk
 RUN python -m pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cu118
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir -U openmim fastapi httpx huggingface_hub gdown python-multipart uvicorn[standard]
-RUN mim install mmengine && mim install "mmcv==2.0.1" && mim install "mmdet==3.1.0" && mim install "mmpose==1.1.0"
+RUN pip install --no-cache-dir -U openmim fastapi httpx gdown python-multipart uvicorn[standard]
+RUN pip install --no-cache-dir "huggingface_hub==0.30.2" "setuptools<81"
+RUN mim install mmengine && mim install "mmcv==2.0.1" && mim install "mmdet==3.1.0"
+RUN mkdir -p /tmp/chumpy     && curl -L https://files.pythonhosted.org/packages/source/c/chumpy/chumpy-0.70.tar.gz -o /tmp/chumpy/chumpy-0.70.tar.gz     && tar -xzf /tmp/chumpy/chumpy-0.70.tar.gz -C /tmp/chumpy     && cd /tmp/chumpy/chumpy-0.70     && python setup.py install     && rm -rf /tmp/chumpy
+RUN PIP_NO_BUILD_ISOLATION=1 mim install "mmpose==1.1.0"
 
 RUN mkdir -p /srv/adapter
 RUN curl -L https://huggingface.co/marcosremar2/MuseTalk/resolve/main/musetalk_api_server.py -o /srv/adapter/musetalk_api_server.py
