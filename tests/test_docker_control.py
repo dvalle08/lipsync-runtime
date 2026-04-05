@@ -9,7 +9,7 @@ def test_compose_up_uses_project_and_file() -> None:
         COMPOSE_PROJECT_NAME="demo-stack",
         COMPOSE_FILE="/srv/demo/compose.yaml",
     )
-    controller = ComposeController(settings)
+    controller = (settings)
 
     with patch("subprocess.run") as run:
         run.return_value.returncode = 0
