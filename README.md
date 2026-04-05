@@ -81,23 +81,8 @@ curl -X POST http://127.0.0.1:8000/jobs/musetalk \
   </tr>
   <tr>
     <td valign="top"><img src="example/Image.png" alt="Example MuseTalk source image" width="100%" /></td>
-    <td valign="top"><video src="example/output.mp4" controls muted playsinline width="100%"></video></td>
+    <td valign="top" align="center">
+      <a href="example/output.mp4">Open sample output video (.mp4)</a>
+    </td>
   </tr>
 </table>
-
-## Behavior notes
-
-- Gateway listens on **localhost only** — it mounts the Docker socket to control backends.  
-- One worker processes jobs **one at a time** on a single-GPU machine; switching engines **stops** the other backend first.  
-- MuseTalk: models stay loaded in the backend process. **MuseTalk image** inputs may be padded to **even** width/height before the job is queued (avoids common `ffmpeg` failures).  
-- SadTalker: runs the upstream **CLI** per job inside a long-lived container.  
-- Idle backends are stopped after **`BACKEND_IDLE_TIMEOUT_SECONDS`** (see `.env.example`).  
-
-## Layout
-
-- `src/talking_head_runtime/` — gateway app  
-- `deploy/compose.runtime.yaml` — stack definition  
-- `docker/` — images (gateway, backends, bootstrap)  
-- `weights/*.manifest.json` — bootstrap file lists  
-
-More copy-paste commands: `dev/smoke/commands_2.md`.
