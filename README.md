@@ -1,4 +1,4 @@
-# Talking Head Runtime
+# Lipsync Runtime
 
 Local runtime for **MuseTalk** and **SadTalker**: a small **FastAPI gateway**, **Redis** queue, and **GPU backends** that start on demand and stop when idle. Model files are installed with explicit **bootstrap** jobs (named Docker volumes), not on first inference.
 
@@ -82,7 +82,11 @@ curl -X POST http://127.0.0.1:8000/jobs/musetalk \
   <tr>
     <td valign="top"><img src="example/Image.png" alt="Example MuseTalk source image" width="100%" /></td>
     <td valign="top" align="center">
-      <a href="example/output.mp4">Open sample output video (.mp4)</a>
+      <a href="example/output.mp4">
+        <img src="example/output-preview.gif" alt="Animated preview of the sample output video" width="100%" />
+      </a>
+      <br />
+      <a href="example/output.mp4">Open full sample output video (.mp4)</a>
     </td>
   </tr>
 </table>
