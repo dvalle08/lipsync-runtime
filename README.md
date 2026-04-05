@@ -62,6 +62,29 @@ curl http://127.0.0.1:8000/jobs/<job_id>
 curl -OJ http://127.0.0.1:8000/jobs/<job_id>/result
 ```
 
+### End-to-end example (`example/`)
+
+From the repository root, submit the committed sample image and audio in `example/` (paths are quoted because the audio filename contains spaces). Poll `/jobs/<job_id>` and download `/jobs/<job_id>/result` as in **Status and result** above.
+
+```bash
+REPO_ROOT="$(pwd)"
+curl -X POST http://127.0.0.1:8000/jobs/musetalk \
+  -F "source=@${REPO_ROOT}/example/Image.png" \
+  -F "audio=@${REPO_ROOT}/example/Guion 5 bullying.mp4" \
+  -F 'options_json={"fps":25,"use_cache":true}'
+```
+
+<table>
+  <tr>
+    <th align="center" width="50%">Input image</th>
+    <th align="center" width="50%">Sample output</th>
+  </tr>
+  <tr>
+    <td valign="top"><img src="example/Image.png" alt="Example MuseTalk source image" width="100%" /></td>
+    <td valign="top"><video src="example/output.mp4" controls muted playsinline width="100%"></video></td>
+  </tr>
+</table>
+
 ## Behavior notes
 
 - Gateway listens on **localhost only** — it mounts the Docker socket to control backends.  
